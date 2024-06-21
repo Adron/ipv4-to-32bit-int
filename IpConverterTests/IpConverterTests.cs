@@ -39,4 +39,25 @@ public class Tests
     {
         Assert.That(IpConvert.ToInt32("10.0.0.1"), Is.EqualTo(167772161), "Incorrect answer for ip = \"10.0.0.1\"");
     }
+
+   [Test]
+    public void TestIpAddress_AddressBlockRangeForZero()
+    {
+        Assert.That(IpConvert.AddressBlock("0.0.0.0/8"), Is.EqualTo(16777216));
+        Assert.That(IpConvert.UsableAddresses("0.0.0.0/8"), Is.EqualTo(16777214));
+    }
+
+    [Test]
+    public void TestIpAddress_AddressBlockForIETFProtocolAssignments()
+    {
+        Assert.That(IpConvert.AddressBlock("192.0.0.0/24"), Is.EqualTo(256));
+        Assert.That(IpConvert.UsableAddresses("192.0.0.0/24"), Is.EqualTo(254));
+    }
+
+    [Test]
+    public void TestIpAddress_BlockForLinkLocalAddress()
+    {
+        Assert.That(IpConvert.AddressBlock("169.254.0.0/16"), Is.EqualTo(65536));
+        Assert.That(IpConvert.UsableAddresses("169.254.0.0/16"), Is.EqualTo(65534));
+    }
 }
